@@ -1,0 +1,503 @@
+{
+	"simulator": {
+		"deltaT": 1,
+		"tZero": 0,
+		"nElements": 26,
+		"elementLabels": [
+			"targetImage",
+			"nodeRed",
+			"nodeGreen",
+			"preprocessing",
+			"targetLocationMap",
+			"hand",
+			"fixedStimuli",
+			"handTargetDifferenceMap",
+			"field d",
+			"velocityMap",
+			"d -> d",
+			"d -> v",
+			"noise u",
+			"noise kernel u",
+			"noise v",
+			"noise kernel v",
+			"c_21",
+			"c_12",
+			"historyRedNodeActivation",
+			"historyRedNodeOutput",
+			"historyGreenNodeActivation",
+			"historyGreenNodeOutput",
+			"shiftedStimulusRed",
+			"shiftedStimulusGreen",
+			"stimulusHistoryRed",
+			"stimulusHistoryGreen"
+		],
+		"elements": [
+			{
+				"label": "targetImage",
+				"class": "ModifiedImageLoader",
+				"param": {
+					"fileNames": [
+						"C:\\Users\\omer\\Desktop\\cosivina\\redTargetOnTheLeft.png",
+						"C:\\Users\\omer\\Desktop\\cosivina\\redTargetInTheMiddle.png",
+						"C:\\Users\\omer\\Desktop\\cosivina\\redTargetOnTheRight.png",
+						"C:\\Users\\omer\\Desktop\\cosivina\\greenTargetOnTheLeft.png",
+						"C:\\Users\\omer\\Desktop\\cosivina\\greenTargetInTheMiddle.png",
+						"C:\\Users\\omer\\Desktop\\cosivina\\greenTargetOnTheRight.png",
+						"C:\\Users\\omer\\Desktop\\cosivina\\NoTargetImage.png"
+					],
+					"size": [120,120],
+					"currentSelection": 1
+				},
+				"nInputs": 0,
+				"input": null
+			},
+			{
+				"label": "nodeRed",
+				"class": "SingleNodeDynamics",
+				"param": {
+					"tau": 10,
+					"h": -1.5,
+					"beta": 4,
+					"selfExcitation": 1.8868,
+					"noiseLevel": 1,
+					"range": [-10,10],
+					"resolution": 0.05
+				},
+				"nInputs": 2,
+				"input": [
+					{
+						"label": "targetImage",
+						"component": "inputForRed"
+					},
+					{
+						"label": "c_12",
+						"component": "output"
+					}
+				]
+			},
+			{
+				"label": "nodeGreen",
+				"class": "SingleNodeDynamics",
+				"param": {
+					"tau": 10,
+					"h": -1.5,
+					"beta": 4,
+					"selfExcitation": 10,
+					"noiseLevel": 1,
+					"range": [-10,10],
+					"resolution": 0.05
+				},
+				"nInputs": 2,
+				"input": [
+					{
+						"label": "targetImage",
+						"component": "inputForGreen"
+					},
+					{
+						"label": "c_21",
+						"component": "output"
+					}
+				]
+			},
+			{
+				"label": "preprocessing",
+				"class": "Preprocessing",
+				"param": {
+					"size": [1,1]
+				},
+				"nInputs": 4,
+				"input": [
+					{
+						"label": "targetImage",
+						"component": "imageRed"
+					},
+					{
+						"label": "targetImage",
+						"component": "imageGreen"
+					},
+					{
+						"label": "nodeRed",
+						"component": "output"
+					},
+					{
+						"label": "nodeGreen",
+						"component": "output"
+					}
+				]
+			},
+			{
+				"label": "targetLocationMap",
+				"class": "NeuralField",
+				"param": {
+					"size": [120,120],
+					"tau": 20,
+					"h": -1,
+					"beta": 4
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "preprocessing",
+					"component": "output"
+				}
+			},
+			{
+				"label": "hand",
+				"class": "ModifiedHand2D",
+				"param": {
+					"size": [120,120],
+					"sigmaX": 16.69812,
+					"sigmaY": 22.64151,
+					"amplitude": 5.18868,
+					"positionY": 58.86792,
+					"positionX": 64.52832,
+					"rowPeakV": 60,
+					"colPeakV": 60,
+					"velocity": 0,
+					"circularX": 1,
+					"circularY": 1,
+					"normalized": 0
+				},
+				"nInputs": 0,
+				"input": null
+			},
+			{
+				"label": "fixedStimuli",
+				"class": "ModifiedGaussStimulus2D",
+				"param": {
+					"size": [120,120],
+					"sigmaX": 14.71698,
+					"sigmaY": 14.43396,
+					"amplitude": 10,
+					"positionX": 60,
+					"positionY": 60,
+					"circularX": 1,
+					"circularY": 1,
+					"normalized": 0
+				},
+				"nInputs": 0,
+				"input": null
+			},
+			{
+				"label": "handTargetDifferenceMap",
+				"class": "ModifiedConvolution",
+				"param": {
+					"size": [120,120],
+					"flipInputs": 1,
+					"handAmplitude": 10,
+					"shape": "same"
+				},
+				"nInputs": 2,
+				"input": [
+					{
+						"label": "hand",
+						"component": "output"
+					},
+					{
+						"label": "targetLocationMap",
+						"component": "output"
+					}
+				]
+			},
+			{
+				"label": "field d",
+				"class": "NeuralField",
+				"param": {
+					"size": [120,120],
+					"tau": 20,
+					"h": -5,
+					"beta": 4
+				},
+				"nInputs": 4,
+				"input": [
+					{
+						"label": "fixedStimuli",
+						"component": "output"
+					},
+					{
+						"label": "handTargetDifferenceMap",
+						"component": "output"
+					},
+					{
+						"label": "d -> d",
+						"component": "output"
+					},
+					{
+						"label": "noise kernel u",
+						"component": "output"
+					}
+				]
+			},
+			{
+				"label": "velocityMap",
+				"class": "ModifiedNeuralField",
+				"param": {
+					"size": [120,120],
+					"tau": 5,
+					"h": -0.2,
+					"beta": 4
+				},
+				"nInputs": 2,
+				"input": [
+					{
+						"label": "d -> v",
+						"component": "output"
+					},
+					{
+						"label": "noise kernel v",
+						"component": "output"
+					}
+				]
+			},
+			{
+				"label": "d -> d",
+				"class": "LateralInteractions2D",
+				"param": {
+					"size": [120,120],
+					"sigmaExcY": 5,
+					"sigmaExcX": 5,
+					"amplitudeExc": 17.92452,
+					"sigmaInhY": 10,
+					"sigmaInhX": 10,
+					"amplitudeInh": 0,
+					"amplitudeGlobal": 0,
+					"circularY": 1,
+					"circularX": 1,
+					"normalized": 1,
+					"cutoffFactor": 5
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "field d",
+					"component": "output"
+				}
+			},
+			{
+				"label": "d -> v",
+				"class": "LateralInteractions2D",
+				"param": {
+					"size": [120,120],
+					"sigmaExcY": 5,
+					"sigmaExcX": 5,
+					"amplitudeExc": 20,
+					"sigmaInhY": 10,
+					"sigmaInhX": 10,
+					"amplitudeInh": 20,
+					"amplitudeGlobal": -0.1,
+					"circularY": 1,
+					"circularX": 1,
+					"normalized": 1,
+					"cutoffFactor": 5
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "field d",
+					"component": "output"
+				}
+			},
+			{
+				"label": "noise u",
+				"class": "NormalNoise",
+				"param": {
+					"size": [120,120],
+					"amplitude": 1
+				},
+				"nInputs": 0,
+				"input": null
+			},
+			{
+				"label": "noise kernel u",
+				"class": "GaussKernel2D",
+				"param": {
+					"size": [120,120],
+					"sigmaX": 5,
+					"sigmaY": 5,
+					"amplitude": 0.2,
+					"circularX": 1,
+					"circularY": 1,
+					"normalized": 1,
+					"cutoffFactor": 5
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "noise u",
+					"component": "output"
+				}
+			},
+			{
+				"label": "noise v",
+				"class": "NormalNoise",
+				"param": {
+					"size": [120,120],
+					"amplitude": 1
+				},
+				"nInputs": 0,
+				"input": null
+			},
+			{
+				"label": "noise kernel v",
+				"class": "GaussKernel2D",
+				"param": {
+					"size": [120,120],
+					"sigmaX": 5,
+					"sigmaY": 5,
+					"amplitude": 0.2,
+					"circularX": 1,
+					"circularY": 1,
+					"normalized": 1,
+					"cutoffFactor": 5
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "noise v",
+					"component": "output"
+				}
+			},
+			{
+				"label": "c_21",
+				"class": "ScaleInput",
+				"param": {
+					"size": [1,1],
+					"amplitude": -5.5
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "nodeRed",
+					"component": "output"
+				}
+			},
+			{
+				"label": "c_12",
+				"class": "ScaleInput",
+				"param": {
+					"size": [1,1],
+					"amplitude": 0
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "nodeGreen",
+					"component": "output"
+				}
+			},
+			{
+				"label": "historyRedNodeActivation",
+				"class": "RunningHistory",
+				"param": {
+					"size": [1,1],
+					"timeSlots": 100,
+					"interval": 1
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "nodeRed",
+					"component": "activation"
+				}
+			},
+			{
+				"label": "historyRedNodeOutput",
+				"class": "RunningHistory",
+				"param": {
+					"size": [1,1],
+					"timeSlots": 100,
+					"interval": 1
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "nodeRed",
+					"component": "output"
+				}
+			},
+			{
+				"label": "historyGreenNodeActivation",
+				"class": "RunningHistory",
+				"param": {
+					"size": [1,1],
+					"timeSlots": 100,
+					"interval": 1
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "nodeGreen",
+					"component": "activation"
+				}
+			},
+			{
+				"label": "historyGreenNodeOutput",
+				"class": "RunningHistory",
+				"param": {
+					"size": [1,1],
+					"timeSlots": 100,
+					"interval": 1
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "nodeGreen",
+					"component": "output"
+				}
+			},
+			{
+				"label": "shiftedStimulusRed",
+				"class": "SumInputs",
+				"param": {
+					"size": [1,1]
+				},
+				"nInputs": 2,
+				"input": [
+					{
+						"label": "targetImage",
+						"component": "inputForRed"
+					},
+					{
+						"label": "nodeRed",
+						"component": "h"
+					}
+				]
+			},
+			{
+				"label": "shiftedStimulusGreen",
+				"class": "SumInputs",
+				"param": {
+					"size": [1,1]
+				},
+				"nInputs": 2,
+				"input": [
+					{
+						"label": "targetImage",
+						"component": "inputForGreen"
+					},
+					{
+						"label": "nodeGreen",
+						"component": "h"
+					}
+				]
+			},
+			{
+				"label": "stimulusHistoryRed",
+				"class": "RunningHistory",
+				"param": {
+					"size": [1,1],
+					"timeSlots": 100,
+					"interval": 1
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "shiftedStimulusRed",
+					"component": "output"
+				}
+			},
+			{
+				"label": "stimulusHistoryGreen",
+				"class": "RunningHistory",
+				"param": {
+					"size": [1,1],
+					"timeSlots": 100,
+					"interval": 1
+				},
+				"nInputs": 1,
+				"input": {
+					"label": "shiftedStimulusGreen",
+					"component": "output"
+				}
+			}
+		]
+	}
+}

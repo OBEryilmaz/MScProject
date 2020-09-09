@@ -1,0 +1,106 @@
+CHANGELOG
+
+* added element TimedBoost
+* added optional argument to Simulator::loadSettings function to allow loading 
+  of changeable parameters only 
+
+Version 1.3
+* added new example launcherCoupling3D
+* added visualization TilePlot for 3D and 4D inputs
+* added element KernelFFT, alternative implementation of convolutions, can be 
+  used instead of GaussKernel, MexicanHatKernel, and LateralInteractions for any
+  dimensionality
+* expanded SumDimension to work with more than two dimensions, added new 
+  ExpandDimension element for higher-dimensional fields
+* added GaussKernel3D, MexicanHatKernel3D, and LateralInteractions3D
+* changed Simulator and ParameterPanel to support changing non-scalar parameters
+* changed ParameterStatus to also allow/specify changeable non-scalar parameters
+NOTE: THIS MAY LEAD TO INCOMPATIBILITIES IF YOU LOAD FULL INSTANTIATED 
+  SIMULATORS INTO THE MATLAB WORKSPACE (FROM A MAT-FILE); THERE SHOULD BE NO 
+  PROBLEMS WITH LOADING FROM PARAMETER FILES.
+* bug fix in TimedGaussStimulus elements (for normalized case)
+* added new example file (with updated documentation) that makes use of the new
+  step function of the StandardGUI class; updated example file and documentation
+  for 2D interactions tutorial (now uses LateralInteractions2D)
+* added step function to StandardGUI class to make it easier to include custom 
+  code to simulations that use a GUI
+* adjusted component lists in 2D interaction elements
+* fixed potential problem with title and axes labels in visualizations (would be
+  added to other plots under certain conditions)
+* added display of element type in ParameterPanel
+* cleaned up and standardized examples for use in DFT book exercises
+* new method addConnection in Simulator class (to allow creating a new 
+  projection between existing elements)
+* slightly changed numerics in AttractorDynamics element to make it more 
+  consistent
+* minor changes in ParameterSlider display and MultiPlot constructor (extra
+  check to help in debugging)
+* added close method for GUI control elements
+* changed behavior of ParameterDropdownSelector (now reflects changes made by
+  other controls)
+* fixed bugs in ShiftInput, StandardGUI (method run could not be called with 4
+  arguments), and CameraGrabber
+* added new interaction element LateralInteractionsDiscrete for groups of
+  discrete nodes (self-excitation and global inhibition)
+* added new interaction elements for 2D fields: MexicanHatKernel2D and 
+  LateralInteractions2D
+* implementation of Gauss kernel computations sourced out from elements to new
+  functions in mathTools
+* added preset versions of two-layer and three-layer simulators to examples
+* redundant copy of SingleLinkageClustering removed from folder mathTools (file 
+  is still found in folder auxiliary)
+
+
+Version 1.2
+* StandardGUI expanded (and cleaned up) for use in offline mode, with methods 
+  init, close, updateVisualizations, and checkAndUpdateControls, and separate 
+  methods load and save
+* method setElementParameters added to Simulator class as standard interface for
+  parameter changes in running simulation (with automatic initialization and 
+  step of element if required), all controls adjusted to use use this method
+* new ParameterStatus value InitStepRequired introduced, element classes updated
+  to use this where appropriate
+* added time-dependent stimulus classes
+* added text-based visualizations StaticText and TimeDisplay
+* updated examples and reworked examples part in documentation
+* added part on expanding the framework in documentation
+
+
+Version 1.1.1
+* fixed bug in MemoryTrace class so that it also works with two-dimensional
+  inputs
+
+
+Version 1.1
+* added comments for command window help to Simulator, StandardGUI, and all 
+  visualization and control classes
+* changed base class of Element to matlab.mixin.Copyable to allow shallow copies
+  of elements without requiring a copy function in each derived class
+* added method copy to Simulator class that creates deep copy of simulator
+* added method connect to StandardGUI class and additional optional parameter
+  in method run, so that one StandardGUI instance can be run with different
+  instances of a simulator
+* added elements History, RunningHistory, WeightMatrix, and SingleNodeDynamics 
+  (documentation), and added elements HalfWaveRectification and DynamicVariable
+* added control PresetSelector (documentation)
+* added visualizations XYPlot and SlicePlot (documentation), and SurfacePlot
+* adjusted Simulator:fromStruct and Simulator:parametersFromStruct functions to
+  be compatible with latest JSONlab version 0.9.1 (which changes certain 
+  matrices to cell arrays when loading a file)
+* adjusted Simulator:parametersFromStruct function so that it is possible to 
+  load from a parameter file that does not fully match the architecture in the 
+  simulator object (with warning indicating the non-matching elements)
+* sligthly changed handling of parameter panel when GUI is closed; previously
+  it could cause problems when starting the same GUI again, now parameter 
+  panel is always closed when re-starting a GUI
+* added support for pauseDuration of 0 in StandardGUI class
+* in StandardGUI, introduced more reasonable handling of pause duration in each
+  step while simulation is paused, by introducing separate property
+  pauseDurationWhilePaused (otherwise wastes resources for very fast updating of
+  plots when the value of pauseDuration is very small)
+* added auxiliary function compareConfigFiles
+* changed form of method calls from object.method(...) to method(object, ...) to
+  improve performance, especially in older Matlab versions
+* removed component input from NeuralField class to improve performance
+
+
